@@ -7,25 +7,31 @@ import dbconfig
 cx_Oracle.init_oracle_client(lib_dir=r"C:\Program Files\Oracle\instantclient_21_3")
 
 fake = Faker('en_GB')
+sql = 'select * from etl_process'
 
 
 def connect_to_db():
     connection = None
     try:
-        connection = cx_Oracle.connect(
-            dbconfig.username,
-            dbconfig.password,
-            dbconfig.dsn,
-            encoding=dbconfig.encoding)
-
-        print(connection.version, "Connected")
+        with cx_Oracle.connect(
+                dbconfig.username,
+                dbconfig.password,
+                dbconfig.dsn,
+                encoding=dbconfig.encoding) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                while True:
+                    row = cursor.fetchone()
+                    if row is None:
+                        print("no row")
+                        break
+                    print(row)
     except cx_Oracle.Error as error:
-        print("error")
         print(error)
-    finally:
-        if connection:
-            print("close")
-            connection.close()
+    # finally:
+    #     if connection:
+    #         print("close")
+    #         connection.close()
 
 
 header = [
@@ -58,27 +64,27 @@ def generate_data():
     f = open('./test_data.csv', 'w', newline='')
     writer = csv.writer(f)
     writer.writerow(header)
-    for _ in range(1000000):
+    for _ in range(10):
         data.append([fake.iana_id(),
-                     fake.prefix(),
-                     fake.first_name(),
-                     fake.last_name(),
-                     fake.ssn(),
-                     fake.ascii_safe_email(),
-                     fake.ascii_company_email(),
-                     fake.domain_name(),
-                     fake.cellphone_number(),
-                     fake.street_name(),
-                     fake.building_number(),
-                     fake.postcode(),
-                     fake.city(),
-                     fake.county(),
-                     fake.current_country(),
-                     fake.current_country_code(),
-                     fake.iban(),
-                     fake.swift(),
-                     fake.ipv4_public(),
-                     fake.mac_address()])
+                     str(fake.prefix()),
+                     str(fake.first_name()),
+                     str(fake.last_name()),
+                     str(fake.ssn()),
+                     str(fake.ascii_safe_email()),
+                     str(fake.ascii_company_email()),
+                     str(fake.domain_name()),
+                     str(fake.cellphone_number()),
+                     str(fake.street_name()),
+                     str(fake.building_number()),
+                     str(fake.postcode()),
+                     str(fake.city()),
+                     str(fake.county()),
+                     str(fake.current_country()),
+                     str(fake.current_country_code()),
+                     str(fake.iban()),
+                     str(fake.swift()),
+                     str(fake.ipv4_public()),
+                     str(fake.mac_address())])
     writer.writerows(data)
     f.close()
     end = perf_counter()
