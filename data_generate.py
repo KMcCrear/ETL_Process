@@ -3,11 +3,12 @@ from faker import Faker
 import csv
 import db_DAO
 import numpy as np
+import uuid
 
-fake = Faker('en_GB')
 
-
-def generate_csv_data(filename):
+def generate_csv_data(filename, rows):
+    Faker.seed(np.random.randint(1, 1000))
+    fake = Faker('en_GB')
     header = [
         'id',
         'prefix',
@@ -37,9 +38,9 @@ def generate_csv_data(filename):
     f = open(f"./data_store/{filename}", 'w', newline='')
     writer = csv.writer(f)
     writer.writerow(header)
-    for _ in range(1000):
+    for _ in range(rows):
         salary = np.random.randint(10000, 200000)
-        data.append([fake.iana_id(),
+        data.append([uuid.uuid4(),
                      str(fake.prefix()),
                      str(fake.first_name()),
                      str(fake.last_name()),
@@ -63,7 +64,7 @@ def generate_csv_data(filename):
     f.close()
     end = perf_counter()
     execution_time = (end - start)
-    print("Generation took ", execution_time, " seconds")
+    print(f"Generation of {filename} took ", execution_time, " seconds")
 
 
 def read_data():
