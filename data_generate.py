@@ -34,7 +34,7 @@ def generate_csv_data(filename):
     data = []
 
     start = perf_counter()
-    f = open('./data_store/test_data.csv', 'w', newline='')
+    f = open(f"./data_store/{filename}", 'w', newline='')
     writer = csv.writer(f)
     writer.writerow(header)
     for _ in range(1000):
