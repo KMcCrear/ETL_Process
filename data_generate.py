@@ -1,41 +1,44 @@
 from time import perf_counter
 from faker import Faker
 import csv
-import insert_into_db
+import db_DAO
+import numpy as np
 
 fake = Faker('en_GB')
 
-header = [
-    '_id',
-    'prefix',
-    'first_name',
-    'last_name',
-    'ssn',
-    'email',
-    'company_email',
-    'domain_name',
-    'phone_number',
-    'address',
-    'street_number',
-    'postcode',
-    'city',
-    'county',
-    'country',
-    'country_code',
-    'iban_no',
-    'swift_no',
-    'ip_address',
-    'mac_address'
-]
-data = []
 
+def generate_csv_data(filename):
+    header = [
+        'id',
+        'prefix',
+        'first_name',
+        'last_name',
+        'ssn',
+        'email',
+        'company_email',
+        'domain_name',
+        'phone_number',
+        'job_title',
+        'salary',
+        'address',
+        'street_number',
+        'postcode',
+        'city',
+        'country',
+        'iban_no',
+        'swift_no',
+        'ip_address',
+        'mac_address'
+    ]
 
-def generate_data():
+    data = []
+
     start = perf_counter()
-    f = open('./test_data.csv', 'w', newline='')
+    f = open('./data_store/test_data.csv', 'w', newline='')
     writer = csv.writer(f)
     writer.writerow(header)
-    for _ in range(10):
+    for _ in range(1000):
+        salary = np.random.randint(10000, 200000)
         data.append([fake.iana_id(),
                      str(fake.prefix()),
                      str(fake.first_name()),
@@ -45,13 +48,13 @@ def generate_data():
                      str(fake.ascii_company_email()),
                      str(fake.domain_name()),
                      str(fake.cellphone_number()),
+                     fake.job(),
+                     salary,
                      str(fake.street_name()),
                      str(fake.building_number()),
                      str(fake.postcode()),
                      str(fake.city()),
-                     str(fake.county()),
                      str(fake.current_country()),
-                     str(fake.current_country_code()),
                      str(fake.iban()),
                      str(fake.swift()),
                      str(fake.ipv4_public()),
@@ -64,7 +67,7 @@ def generate_data():
 
 
 def read_data():
-    file = open("test_data.csv")
+    file = open("data_store/test_data.csv")
     csvreader = csv.reader(file)
     file_header = next(csvreader)
     #print(file_header)
@@ -72,6 +75,6 @@ def read_data():
     rows = []
 
     for row in csvreader:
-        insert_into_db.insert_etl(row)
+        db_DAO.insert_etl(row)
     #print(rows)
     file.close()

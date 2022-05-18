@@ -1,39 +1,22 @@
 import cx_Oracle
+
+import db_DAO
 import dbconfig
-import generateCSV
+import data_generate
 from time import perf_counter
+import time
+from threading import Thread
+import logging
 
-cx_Oracle.init_oracle_client(lib_dir=r"C:\Program Files\Oracle\instantclient_21_3")
-
-sql = 'select * from etl_process'
-
-# connection to the database
-def connect_to_db():
-    connection = None
-    try:
-        with cx_Oracle.connect(
-                dbconfig.username,
-                dbconfig.password,
-                dbconfig.dsn,
-                encoding=dbconfig.encoding) as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(sql)
-                while True:
-                    row = cursor.fetchone()
-                    if row is None:
-                        break
-                    print(row)
-    except cx_Oracle.Error as error:
-        print(error)
-
-
+# csv_thread = Thread(target=db_DAO.sql_loader())
 
 
 if __name__ == '__main__':
+    """DB stuff"""
     start = perf_counter()
-    # connect_to_db()
-    generateCSV.generate_data()
-    generateCSV.read_data()
+    data_generate.generate_csv_data()
+    # CSV_store.read_data()
+    # t=csv_thread.start()
     end = perf_counter()
     execution_time = (end - start)
-    print(execution_time)
+    print("Took", execution_time, "Seconds")
