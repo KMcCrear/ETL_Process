@@ -35,7 +35,7 @@ def sql_loader():
     host = 'localhost'
     database = 'XE'
     controlfile = './data_store/test_data.ctl'
-    sqlldr_command = f"""sqlldr USERID='{cfg.username}/{cfg.password}@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={host})(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME ={database}) ))'  control={controlfile}  parallel=true"""
+    sqlldr_command = f"""sqlldr USERID='{cfg.username}/{cfg.password}@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={host})(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME ={database}) ))'  control={controlfile} direct=true"""
     subprocess.call(sqlldr_command, shell=True)
 
 def load_employee():
@@ -46,5 +46,5 @@ def load_employee():
     host = 'localhost'
     database = 'XE'
     controlfile = './data_store/employee_data.ctl'
-    sqlldr_command = f"""sqlldr USERID='{cfg.username}/{cfg.password}@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={host})(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME ={database}) ))'  control={controlfile}  parallel=true"""
+    sqlldr_command = f"""sqlldr USERID='{cfg.username}/{cfg.password}@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={host})(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME ={database}) ))'  control={controlfile} direct=true"""
     subprocess.call(sqlldr_command, shell=True)
