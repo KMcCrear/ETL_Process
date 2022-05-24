@@ -7,6 +7,13 @@ import uuid
 
 
 def generate_csv_data(filename, rows):
+    """
+        Generate data
+        :param filename
+        :param rows
+        :return:
+    """
+
     Faker.seed(np.random.randint(1, 1000))
     fake = Faker('en_GB')
     header = [
@@ -65,17 +72,3 @@ def generate_csv_data(filename, rows):
     end = perf_counter()
     execution_time = (end - start)
     print(f"Generation of {filename} took ", execution_time, " seconds")
-
-
-def read_data():
-    file = open("data_store/test_data.csv")
-    csvreader = csv.reader(file)
-    file_header = next(csvreader)
-    #print(file_header)
-
-    rows = []
-
-    for row in csvreader:
-        db_DAO.insert_etl(row)
-    #print(rows)
-    file.close()

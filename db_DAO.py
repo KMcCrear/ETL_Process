@@ -2,6 +2,7 @@ import cx_Oracle
 import dbconfig as cfg
 import subprocess
 
+
 def insert_etl(data_list):
     """
         insert row of data
@@ -27,6 +28,28 @@ def insert_etl(data_list):
         print(error)
 
 
+def alter_table():
+
+    sql = ('alter table etl_process add constraint  "fk_id" primary key (id)')
+
+    try:
+        # establish a new connection
+        with cx_Oracle.connect(cfg.username,
+                               cfg.password,
+                               cfg.dsn,
+                               encoding=cfg.encoding) as connection:
+            # create a cursor
+            with connection.cursor() as cursor:
+                # execute the insert statement
+                cursor.execute(sql)
+    except cx_Oracle.Error as error:
+        print('Error occurred:')
+        print(error)
+    finally:
+        print("Table altered successfully")
+
+
+
 def sql_loader():
     """
     Inserting data using sql loader
@@ -35,7 +58,7 @@ def sql_loader():
     host = 'localhost'
     database = 'XE'
     controlfile = './data_store/test_data.ctl'
-    sqlldr_command = f"""sqlldr USERID='{cfg.username}/{cfg.password}@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={host})(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME ={database}) ))'  control={controlfile} direct=true"""
+    sqlldr_command = f"""sqlldr USERID='{cfg.username}/{cfg.password}@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={host})(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME ={database}) ))'  control={controlfile} parallel=true"""
     subprocess.call(sqlldr_command, shell=True)
 
 def load_employee():
@@ -46,5 +69,6 @@ def load_employee():
     host = 'localhost'
     database = 'XE'
     controlfile = './data_store/employee_data.ctl'
-    sqlldr_command = f"""sqlldr USERID='{cfg.username}/{cfg.password}@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={host})(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME ={database}) ))'  control={controlfile} direct=true"""
+    sqlldr_command = f"""sqlldr USERID='{cfg.username}/{cfg.password}@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={host})(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME ={database}) ))'  control={controlfile} parallel=true"""
     subprocess.call(sqlldr_command, shell=True)
+
