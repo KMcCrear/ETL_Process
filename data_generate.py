@@ -4,6 +4,8 @@ import csv
 import db_DAO
 import numpy as np
 import uuid
+import pandas as pd
+import dask.dataframe as dd
 
 
 def generate_csv_data(filename, rows):
@@ -72,3 +74,10 @@ def generate_csv_data(filename, rows):
     end = perf_counter()
     execution_time = (end - start)
     print(f"Generation of {filename} took ", execution_time, " seconds")
+
+
+def read_file(filename):
+    print('here')
+    for chunk_df in pd.read_csv(f"./data_store/{filename}.csv", chunksize=1000):
+        values = chunk_df.values
+        db_DAO.insert_etl(values.tolist())
