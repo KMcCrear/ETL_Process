@@ -1,11 +1,18 @@
 ## ETL Multithreading Approach
 
-### Overall Performance
-Script takes approx 18 minutes to generate 2 million records and insert them into the target DB using SQL*Loader
+### Performance
 
-#### Loading Performance
+Inserting 2 million rows from two CSV that contain 20 columns takes an average of 310 seconds using two threads. 
 
-Direct Method :-
-To load two CSV files with 1 million rows each into the target DB it takes an average of 20 seconds
+#### Dependencies
 
-Conventional Method :- 142.1 Seconds
+- Time
+- Multiprocessing
+- perfcounter
+- cx_Oracle
+- subprocess
+- Faker
+- CSV
+- Numpy
+- Uuid
+- pandas
