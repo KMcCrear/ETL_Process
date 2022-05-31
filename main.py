@@ -15,8 +15,8 @@ if __name__ == '__main__':
     # gen2.join()
 
     """Data input"""
-    first_thread = mp.Process(target=data_generate.read_file, args=('test_data',))
-    second_thread = mp.Process(target=data_generate.read_file, args=("employee_data",))
+    first_thread = mp.Process(target=data_generate.read_file, args=('test_data', 10000))
+    second_thread = mp.Process(target=data_generate.read_file, args=("employee_data", 10000))
     first_thread.start()
     second_thread.start()
     first_thread.join()

@@ -75,7 +75,8 @@ def generate_csv_data(filename, rows):
     print(f"Generation of {filename} took ", execution_time, " seconds")
 
 
-def read_file(filename):
-    for chunk_df in pd.read_csv(f"./data_store/{filename}.csv", chunksize=1000):
+def read_file(filename, chunk_size):
+    db = db_DAO.db_DAO(0)
+    for chunk_df in pd.read_csv(f"./data_store/{filename}.csv", chunksize=chunk_size):
         values = chunk_df.values
-        db_DAO.insert_etl(values.tolist())
+        db.insert_etl(values.tolist())
