@@ -7,8 +7,8 @@ if __name__ == '__main__':
     threading = mp.set_start_method('spawn')
 
     """Data generation methods: """
-    # gen_1 = mp.Process(target=data_generate.generate_csv_data, args=('test_data.csv', 1000000))
-    # gen2 = mp.Process(target=data_generate.generate_csv_data, args=('employee_data.csv', 1000000))
+    # gen_1 = mp.Process(target=data_generate.generate_csv_data, args=('test_data.csv', 2000000))
+    # gen2 = mp.Process(target=data_generate.generate_csv_data, args=('employee_data.csv', 2000000))
     # gen_1.start()
     # gen2.start()
     # gen_1.join()
